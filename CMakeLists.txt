@@ -29,7 +29,7 @@ target_include_directories(objects PUBLIC
 find_package(date CONFIG REQUIRED)
 target_link_libraries(objects PUBLIC date::date date::tz)
 
-find_package(fmt REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 target_link_libraries(objects PUBLIC fmt::fmt)
 
 find_package(Threads REQUIRED)
