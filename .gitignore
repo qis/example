@@ -1,0 +1,16 @@
+/*
+.*
+*.aps
+!/res/
+!/src/
+!/.clang-format
+!/.clang-tidy
+!/.editorconfig
+!/.gitattributes
+!/.gitignore
+!/CMakeLists.txt
+!/CMakeSettings.json
+!/license.txt
+!/make.cmd
+!/makefile
+!/readme.md
