@@ -71,7 +71,7 @@ if(NOT DISABLE_TESTS)
 
   include(CTest)
   include(Catch)
-  catch_discover_tests(tests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+  catch_discover_tests(tests)
 endif()
 
 # Install
