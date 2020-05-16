@@ -66,4 +66,5 @@ function(tzdata target version destination)
   endforeach()
 
   target_sources(${target} PRIVATE ${tzdata_sources})
+  set_property(SOURCE ${tzdata_sources} PROPERTY GENERATED ON)
 endfunction()
