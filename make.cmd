@@ -35,5 +35,4 @@ set __VS_LOCATION=
 set __VS_EDITIONS=
 
 :make
-pause
 nmake /nologo system=windows %*
