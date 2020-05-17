@@ -13,7 +13,7 @@ configure_file(res/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/version.h LF)
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/res/cmake)
 
 # Sources
-file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/${PROJECT_NAME}/*.[hc]pp)
+file(GLOB_RECURSE sources src/${PROJECT_NAME}/*.[hc]pp)
 
 # Objects
 add_library(objects OBJECT ${sources})
@@ -50,7 +50,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE objects)
 
 # Benchmark
 if(NOT DISABLE_BENCHMARK)
-  file(GLOB_RECURSE benchmark_sources CONFIGURE_DEPENDS src/benchmark/*.[hc]pp)
+  file(GLOB_RECURSE benchmark_sources src/benchmark/*.[hc]pp)
   add_executable(benchmark EXCLUDE_FROM_ALL ${benchmark_sources})
   target_precompile_headers(benchmark REUSE_FROM objects)
   target_link_libraries(benchmark PRIVATE objects)
@@ -61,7 +61,7 @@ endif()
 
 # Tests
 if(NOT DISABLE_TESTS)
-  file(GLOB_RECURSE tests_sources CONFIGURE_DEPENDS src/tests/*.[hc]pp)
+  file(GLOB_RECURSE tests_sources src/tests/*.[hc]pp)
   add_executable(tests EXCLUDE_FROM_ALL ${tests_sources})
   target_precompile_headers(tests REUSE_FROM objects)
   target_link_libraries(tests PRIVATE objects)
@@ -118,7 +118,3 @@ if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
   endif()
   include(CPack)
 endif()
-
-# Visual Studio
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
