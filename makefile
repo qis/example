@@ -47,10 +47,12 @@ build/linux/debug/rules.ninja: CMakeLists.txt
 	@cmake -GNinja -DCMAKE_BUILD_TYPE=Debug \
 	  -DCMAKE_INSTALL_PREFIX="$(CURDIR)/build/install" \
 	  -DCMAKE_TOOLCHAIN_FILE="$(CURDIR)/res/toolchain.cmake" \
+	  -DENABLE_STATIC_ANALYSIS=ON \
 	  -B build/linux/debug
 
 build/linux/release/rules.ninja: CMakeLists.txt
 	@cmake -GNinja -DCMAKE_BUILD_TYPE=Release \
 	  -DCMAKE_INSTALL_PREFIX="$(CURDIR)/build/install" \
 	  -DCMAKE_TOOLCHAIN_FILE="$(CURDIR)/res/toolchain.cmake" \
+	  -DENABLE_STATIC_ANALYSIS=ON \
 	  -B build/linux/release

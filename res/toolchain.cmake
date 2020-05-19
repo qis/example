@@ -36,6 +36,9 @@ endif()
 # Include vcpkg toolchain.
 include("${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 
+# Declare vcpkg headers as system headers.
+include_directories(AFTER SYSTEM "${VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/include")
+
 if(WIN32)
   # Disable logo for compiler and linker.
   set(CMAKE_CL_NOLOGO "/nologo" CACHE STRING "")
@@ -60,9 +63,11 @@ if(WIN32)
 endif()
 
 # Configure clang-tidy.
-if(NOT WIN32 AND CMAKE_BUILD_TYPE MATCHES Release)
+if(ENABLE_STATIC_ANALYSIS)
   find_program(clang-tidy NAMES clang-tidy)
   if(clang-tidy)
     set(CMAKE_CXX_CLANG_TIDY ${clang-tidy})
+  else()
+    message(FATAL_ERROR "Could not find program: clang-tidy")
   endif()
 endif()
