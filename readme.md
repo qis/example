@@ -1,11 +1,8 @@
 # Application
 C++ application project template.
 
-## Requirements
-Use [Visual Studio 2019](https://visualstudio.microsoft.com/) on Windows
-and [LLVM 10](https://llvm.org/) or [GCC 10](https://gcc.gnu.org/) on Linux.
-
-Use [Vcpkg](https://github.com/microsoft/vcpkg) to install dependencies.
+## Dependencies
+See [qis/toolchains](https://github.com/qis/toolchains) for vcpkg setup instructions.
 
 ```sh
 vcpkg install benchmark catch2 date fmt

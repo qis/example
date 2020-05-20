@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(application DESCRIPTION "Application" VERSION 0.1.0 LANGUAGES CXX)
 
 # Options
@@ -37,11 +37,6 @@ target_link_libraries(objects PUBLIC Threads::Threads)
 
 include(tzdata)
 tzdata(objects 2020a ${CMAKE_CURRENT_BINARY_DIR}/tzdata)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL GNU)
-  target_link_libraries(objects PUBLIC stdc++fs)
-  target_link_options(objects PUBLIC -static-libstdc++)
-endif()
 
 # Executable
 add_executable(${PROJECT_NAME} src/main.cpp src/main.manifest src/main.rc)
@@ -113,7 +108,7 @@ if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
     set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/${PROJECT_NAME}")
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.27)")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc++1-10, libc++abi1-10")
     set(CPACK_DEBIAN_PACKAGE_SECTION "misc")
   endif()
   include(CPack)

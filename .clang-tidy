@@ -3,6 +3,7 @@
 Checks: "-*,\
 clang-diagnostic-*,\
 clang-analyzer-*,\
+-clang-analyzer-deadcode.DeadStores,\
 bugprone-*,\
 -bugprone-dynamic-static-initializers,\
 -bugprone-forward-declaration-namespace,\

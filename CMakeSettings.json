@@ -5,8 +5,7 @@
       "generator": "Ninja",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "cmakeExecutable": "C:\\Program Files\\CMake\\bin\\cmake.exe",
-      "cmakeToolchain": "${projectDir}\\res\\toolchain.cmake",
+      "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
       "buildRoot": "${projectDir}\\build\\windows\\debug",
       "installRoot": "${projectDir}\\build\\install"
     },
@@ -15,10 +14,9 @@
       "generator": "Ninja",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "cmakeExecutable": "C:\\Program Files\\CMake\\bin\\cmake.exe",
-      "cmakeToolchain": "${projectDir}\\res\\toolchain.cmake",
-      "buildRoot": "${projectDir}\\build\\windows\\release",
-      "installRoot": "${projectDir}\\build\\install"
+      "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
+      "installRoot": "${projectDir}\\build\\install",
+      "buildRoot": "${projectDir}\\build\\windows\\release"
     }
   ]
 }
