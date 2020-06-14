@@ -60,7 +60,7 @@ FixNamespaceComments: true
 IncludeBlocks: Preserve
 #IndentCaseBlocks: false
 IndentCaseLabels: false
-IndentGotoLabels: false
+IndentGotoLabels: true
 IndentPPDirectives: None
 IndentWidth: 2
 IndentWrappedFunctionNames: false
