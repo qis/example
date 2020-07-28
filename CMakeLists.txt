@@ -27,7 +27,7 @@ target_include_directories(objects PUBLIC
 
 # Dependencies
 find_package(date CONFIG REQUIRED)
-target_link_libraries(objects PUBLIC date::date date::tz)
+target_link_libraries(objects PUBLIC date::date date::date-tz)
 
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(objects PUBLIC fmt::fmt)
