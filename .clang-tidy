@@ -9,12 +9,14 @@ bugprone-*,\
 -bugprone-forward-declaration-namespace,\
 -bugprone-macro-parentheses,\
 cppcoreguidelines-*,\
+-cppcoreguidelines-avoid-goto,\
 -cppcoreguidelines-avoid-magic-numbers,\
 -cppcoreguidelines-macro-usage,\
 -cppcoreguidelines-owning-memory,\
 -cppcoreguidelines-pro-bounds-pointer-arithmetic,\
 -cppcoreguidelines-pro-type-reinterpret-cast,\
 -cppcoreguidelines-pro-type-union-access,\
+-cppcoreguidelines-special-member-functions,\
 fuchsia-multiple-inheritance,\
 fuchsia-trailing-return,\
 fuchsia-virtual-inheritance,\
