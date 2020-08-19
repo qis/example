@@ -16,8 +16,8 @@ test: build/$(system)/debug/rules.ninja build/$(system)/release/rules.ninja
 	@cmake -E chdir build/$(system)/release ./tests
 
 benchmark: build/$(system)/release/rules.ninja
-	@cmake --build build/$(system)/release --target benchmark
-	@cmake -E chdir build/$(system)/release ./benchmark
+	@cmake --build build/$(system)/release --target benchmarks
+	@cmake -E chdir build/$(system)/release ./benchmarks
 
 install: build/$(system)/release/rules.ninja
 	@cmake --build build/$(system)/release --target install

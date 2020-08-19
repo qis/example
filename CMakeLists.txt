@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(application DESCRIPTION "Application" VERSION 0.1.0 LANGUAGES CXX)
 
 # Options
-option(DISABLE_BENCHMARK "Disable benchmark" OFF)
+option(DISABLE_BENCHMARKS "Disable benchmarks" OFF)
 option(DISABLE_TESTS "Disable tests" OFF)
 
 # Version
@@ -43,15 +43,15 @@ add_executable(${PROJECT_NAME} src/main.cpp src/main.manifest src/main.rc)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM objects)
 target_link_libraries(${PROJECT_NAME} PRIVATE objects)
 
-# Benchmark
-if(NOT DISABLE_BENCHMARK)
-  file(GLOB_RECURSE benchmark_sources src/benchmark/*.[hc]pp)
-  add_executable(benchmark EXCLUDE_FROM_ALL ${benchmark_sources})
-  target_precompile_headers(benchmark REUSE_FROM objects)
-  target_link_libraries(benchmark PRIVATE objects)
+# Benchmarks
+if(NOT DISABLE_BENCHMARKS)
+  file(GLOB_RECURSE benchmarks_sources src/benchmarks/*.[hc]pp)
+  add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources})
+  target_precompile_headers(benchmarks REUSE_FROM objects)
+  target_link_libraries(benchmarks PRIVATE objects)
 
   find_package(benchmark CONFIG REQUIRED)
-  target_link_libraries(benchmark PRIVATE benchmark::benchmark_main)
+  target_link_libraries(benchmarks PRIVATE benchmark::benchmark_main)
 endif()
 
 # Tests
@@ -61,12 +61,11 @@ if(NOT DISABLE_TESTS)
   target_precompile_headers(tests REUSE_FROM objects)
   target_link_libraries(tests PRIVATE objects)
 
-  find_package(Catch2 CONFIG REQUIRED)
-  target_link_libraries(tests PRIVATE Catch2::Catch2)
+  find_package(GTest CONFIG REQUIRED)
+  target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main)
 
-  include(CTest)
-  include(Catch)
-  catch_discover_tests(tests)
+  include(GoogleTest)
+  gtest_discover_tests(tests)
 endif()
 
 # Install

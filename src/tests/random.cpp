@@ -1,6 +1,6 @@
 #include <application/random.hpp>
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
-TEST_CASE("application::random") {
-  REQUIRE(!application::random().empty());
+TEST(application, random) {
+  ASSERT_FALSE(application::random().empty());
 }
