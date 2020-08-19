@@ -5,7 +5,7 @@ C++ application project template.
 See [qis/toolchains](https://github.com/qis/toolchains) for vcpkg setup instructions.
 
 ```sh
-vcpkg install benchmark catch2 date fmt
+vcpkg install benchmark gtest date fmt
 ```
 
 Install the [WiX Toolset](https://github.com/wixtoolset/wix3/releases) to create Windows packages.
