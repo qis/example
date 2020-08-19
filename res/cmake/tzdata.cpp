@@ -43,7 +43,6 @@ const bool initialized = []() {
     return false;
   }
   date::set_install(std::filesystem::canonical(tzdata).string());
-  date::reload_tzdb();
   return true;
 }();
 
