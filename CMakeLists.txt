@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(application DESCRIPTION "Application" VERSION 0.1.0 LANGUAGES CXX)
 
-# Options
-option(DISABLE_BENCHMARKS "Disable benchmarks" OFF)
-option(DISABLE_TESTS "Disable tests" OFF)
-
 # Version
 set(PROJECT_VENDOR "Company")
 configure_file(res/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/version.h LF)
@@ -44,25 +40,21 @@ target_precompile_headers(${PROJECT_NAME} REUSE_FROM objects)
 target_link_libraries(${PROJECT_NAME} PRIVATE objects)
 
 # Benchmarks
-if(NOT DISABLE_BENCHMARKS)
+find_package(benchmark CONFIG)
+if(benchmark_FOUND)
   file(GLOB_RECURSE benchmarks_sources src/benchmarks/*.[hc]pp)
-  add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources})
+  add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources} src/main.manifest)
+  target_link_libraries(benchmarks PRIVATE objects benchmark::benchmark_main)
   target_precompile_headers(benchmarks REUSE_FROM objects)
-  target_link_libraries(benchmarks PRIVATE objects)
-
-  find_package(benchmark CONFIG REQUIRED)
-  target_link_libraries(benchmarks PRIVATE benchmark::benchmark_main)
 endif()
 
 # Tests
-if(NOT DISABLE_TESTS)
+find_package(GTest CONFIG)
+if(GTest_FOUND)
   file(GLOB_RECURSE tests_sources src/tests/*.[hc]pp)
-  add_executable(tests EXCLUDE_FROM_ALL ${tests_sources})
+  add_executable(tests EXCLUDE_FROM_ALL ${tests_sources} src/main.manifest)
+  target_link_libraries(tests PRIVATE objects GTest::gtest GTest::gtest_main)
   target_precompile_headers(tests REUSE_FROM objects)
-  target_link_libraries(tests PRIVATE objects)
-
-  find_package(GTest CONFIG REQUIRED)
-  target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main)
 
   include(GoogleTest)
   gtest_discover_tests(tests)
