@@ -57,12 +57,10 @@ endif()
 # Install
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
-if(WIN32)
-  if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
-    install(FILES
-      $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
-      DESTINATION bin)
-  endif()
+if(WIN32 AND VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
+  install(FILES
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
+    DESTINATION bin)
 endif()
 
 # Package
