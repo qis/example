@@ -22,17 +22,11 @@ target_include_directories(objects PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Dependencies
-find_package(date CONFIG REQUIRED)
-target_link_libraries(objects PUBLIC date::date date::date-tz)
-
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(objects PUBLIC fmt::fmt)
 
 find_package(Threads REQUIRED)
 target_link_libraries(objects PUBLIC Threads::Threads)
-
-include(tzdata)
-tzdata(objects 2020a ${CMAKE_CURRENT_BINARY_DIR}/tzdata)
 
 # Executable
 add_executable(${PROJECT_NAME} src/main.cpp src/main.manifest src/main.rc)
@@ -64,11 +58,9 @@ endif()
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
 if(WIN32)
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tzdata DESTINATION share)
   if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
     install(FILES
       $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
-      $<TARGET_FILE_DIR:${PROJECT_NAME}>/tz.dll
       DESTINATION bin)
   endif()
 endif()
@@ -99,7 +91,7 @@ if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
     set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/${PROJECT_NAME}")
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc++1-10, tzdata")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc++1-10")
     set(CPACK_DEBIAN_PACKAGE_SECTION "misc")
   endif()
   include(CPack)
