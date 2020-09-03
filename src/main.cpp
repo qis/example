@@ -1,6 +1,7 @@
 #include <application/random.hpp>
 
-int main() {
+int main()
+{
   try {
     fmt::print("{}\n", application::random());
   }

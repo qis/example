@@ -55,9 +55,11 @@ using namespace std::literals::string_view_literals;
 // ============================================================================
 
 template <>
-struct fmt::formatter<std::filesystem::path> : fmt::formatter<std::string_view> {
+struct fmt::formatter<std::filesystem::path> : fmt::formatter<std::string_view>
+{
   template <typename FormatContext>
-  auto format(const std::filesystem::path& path, FormatContext& context) {
+  auto format(const std::filesystem::path& path, FormatContext& context)
+  {
     return fmt::formatter<std::string_view>::format(path.string(), context);
   }
 };
