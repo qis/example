@@ -14,6 +14,9 @@ AlignOperands: DontAlign
 PointerAlignment: Left
 
 # Breaks
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Empty
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
@@ -51,6 +54,7 @@ PenaltyBreakComment: 100
 PenaltyBreakFirstLessLess: 100
 PenaltyBreakString: 1000
 PenaltyExcessCharacter: 10
+PenaltyReturnTypeOnItsOwnLine: 10000
 
 # Comments
 ReflowComments: false
