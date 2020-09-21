@@ -12,8 +12,8 @@ run: build/$(system)/$(config)/rules.ninja
 test: build/$(system)/debug/rules.ninja build/$(system)/release/rules.ninja
 	@cmake --build build/$(system)/debug --target tests
 	@cmake --build build/$(system)/release --target tests
-	@cmake -E chdir build/$(system)/debug ctest
-	@cmake -E chdir build/$(system)/release ctest
+	@cmake -E chdir build/$(system)/debug ctest --progress --output-on-failure
+	@cmake -E chdir build/$(system)/release ctest --progress --output-on-failure
 
 benchmark: build/$(system)/release/rules.ninja
 	@cmake --build build/$(system)/release --target benchmarks
