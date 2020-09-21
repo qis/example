@@ -33,15 +33,6 @@ add_executable(${PROJECT_NAME} src/main.cpp src/main.manifest src/main.rc)
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM objects)
 target_link_libraries(${PROJECT_NAME} PRIVATE objects)
 
-# Benchmarks
-find_package(benchmark CONFIG)
-if(benchmark_FOUND)
-  file(GLOB_RECURSE benchmarks_sources src/benchmarks/*.[hc]pp)
-  add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources} src/main.manifest)
-  target_link_libraries(benchmarks PRIVATE objects benchmark::benchmark_main)
-  target_precompile_headers(benchmarks REUSE_FROM objects)
-endif()
-
 # Tests
 find_package(GTest CONFIG)
 if(GTest_FOUND)
@@ -56,17 +47,26 @@ if(GTest_FOUND)
   gtest_discover_tests(tests)
 endif()
 
-# Install
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-
-if(WIN32 AND VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
-  install(FILES
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
-    DESTINATION bin)
-endif()
-
-# Package
 if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
+  # Benchmarks
+  find_package(benchmark CONFIG)
+  if(benchmark_FOUND)
+    file(GLOB_RECURSE benchmarks_sources src/benchmarks/*.[hc]pp)
+    add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources} src/main.manifest)
+    target_link_libraries(benchmarks PRIVATE objects benchmark::benchmark_main)
+    target_precompile_headers(benchmarks REUSE_FROM objects)
+  endif()
+
+  # Install
+  install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+
+  if(WIN32 AND VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
+    install(FILES
+      $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
+      DESTINATION bin)
+  endif()
+
+  # Package
   string(UUID PROJECT_GUID TYPE SHA1
     NAMESPACE 6BA7B814-9DAD-11D1-80B4-00C04FD430C8
     NAME "CN=${PROJECT_NAME}, O=${PROJECT_VENDOR}")
