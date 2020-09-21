@@ -9,6 +9,7 @@ bugprone-*,\
 -bugprone-forward-declaration-namespace,\
 -bugprone-macro-parentheses,\
 cppcoreguidelines-*,\
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
 -cppcoreguidelines-avoid-goto,\
 -cppcoreguidelines-avoid-magic-numbers,\
 -cppcoreguidelines-macro-usage,\
@@ -26,6 +27,7 @@ misc-*,\
 -misc-unused-alias-decls,\
 -misc-unused-parameters,\
 -misc-unused-using-decls,\
+-misc-throw-by-value-catch-by-reference,\
 modernize-*,\
 -modernize-raw-string-literal,\
 -modernize-use-nodiscard,\
@@ -37,6 +39,7 @@ readability-*,\
 -readability-magic-numbers,\
 -readability-named-parameter,\
 -readability-else-after-return,\
+-readability-implicit-bool-conversion,\
 -readability-uppercase-literal-suffix"
 HeaderFilterRegex: '\.hpp$'
 AnalyzeTemporaryDtors: false
