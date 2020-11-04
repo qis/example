@@ -3,9 +3,14 @@
 BasedOnStyle: LLVM
 
 # Indent
+IndentWidth: 2
 ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 2
+IndentCaseBlocks: false
+IndentExternBlock: false
+IndentGotoLabels: true
 IndentPPDirectives: AfterHash
+NamespaceIndentation: None
 
 # Alignment
 AlignAfterOpenBracket: AlwaysBreak
@@ -17,34 +22,63 @@ PointerAlignment: Left
 AllowAllArgumentsOnNextLine: true
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Empty
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
-AllowShortIfStatementsOnASingleLine: Never
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:
+  AfterCaseLabel: true
   AfterClass: true
-  AfterControlStatement: MultiLine
+  AfterControlStatement: Always
+  AfterEnum: true
   AfterFunction: true
+  AfterNamespace: false
   AfterStruct: true
   AfterUnion: true
+  AfterExternBlock: false
   BeforeCatch: true
-  BeforeElse: false
-  BeforeLambdaBody: false
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: false
+  IndentBraces: false
   SplitEmptyFunction: false
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 BreakBeforeBraces: Custom
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: AfterColon
+BreakStringLiterals: false
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
 
 # Spaces
 Cpp11BracedListStyle: false
-SpacesInContainerLiterals: false
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
 
 # Columns
 ColumnLimit: 100
@@ -58,6 +92,7 @@ PenaltyReturnTypeOnItsOwnLine: 10000
 
 # Comments
 ReflowComments: false
+FixNamespaceComments: true
 SpacesBeforeTrailingComments: 2
 CommentPragmas: '^ (NOTE|TODO):'
 
@@ -69,7 +104,7 @@ DeriveLineEnding: false
 UseCRLF: false
 ---
 Language: Cpp
-Standard: c++20
+Standard: Latest
 
 # Includes
 SortIncludes: true
@@ -79,22 +114,21 @@ IncludeCategories:
   - Regex: '^"'
     Priority: 1
 
-    # Windows Core Headers
-  - Regex: '^<(ntifs|windows)\.h>'
+    # Project Config
+  - Regex: '^<application/config.hpp>$'
     Priority: 2
 
-    # Windows Driver Headers
-  - Regex: '^<(ntddk|wdm)\.h>'
+    # Project Headers
+  - Regex: '^<application/'
     Priority: 3
 
     # Windows Headers
-  - Regex: '^<(wdf|shellapi|winsock2|ws2tcpip|mswsock)\.h>'
+  - Regex: '^<(ntifs|windows)\.h>$'
     Priority: 4
 
-    # GTest Headers
-  - Regex: '^<(gtest|gmock)/'
+    # System Headers
+  - Regex: '^<(wdf|shellapi|winsock2|ws2tcpip|mswsock)\.h>$'
     Priority: 5
-    SortPriority: 0
 
     # Library Headers
   - Regex: '^<.*\.'
@@ -109,7 +143,7 @@ IncludeCategories:
     Priority: 7
 
 # Sources: a.hpp is main include for a.cpp, a_test.cpp, etc.
-IncludeIsMainRegex: '(_test|_win32|_posix)?$'
+IncludeIsMainRegex: '(_test|_windows|_linux|_posix)?$'
 
 # Headers: a.hpp, a_base.hpp, etc. are main includes for a.cpp
 IncludeIsMainSourceRegex: '(_base|_impl)?$'

@@ -1,46 +1,51 @@
-config = debug
-system = linux
-target = application
+SYSTEM = linux
+TARGET = application
 
-all: build/$(system)/$(config)/rules.ninja
-	@cmake --build build/$(system)/$(config)
+# Build
+all: configure
+	@ninja -C build/$(SYSTEM) -f build-Debug.ninja
+	@ninja -C build/$(SYSTEM) -f build-Release.ninja
 
-run: build/$(system)/$(config)/rules.ninja
-	@cmake --build build/$(system)/$(config)
-	@cmake -E chdir build/$(system)/$(config) ./$(target)
+# Configure
+build/$(SYSTEM)/build.ninja: CMakeLists.txt
+	@cmake -G "Ninja Multi-Config" \
+	  -DCMAKE_CONFIGURATION_TYPES="Debug;Release" \
+	  -DCMAKE_TOOLCHAIN_FILE="$(VCPKG_ROOT)/triplets/toolchains/$(SYSTEM).cmake" \
+	  -DCMAKE_INSTALL_PREFIX="$(CURDIR)/build/install" \
+	  -DVCPKG_TARGET_TRIPLET="x64-$(SYSTEM)-xnet" \
+	  -B build/$(SYSTEM)
 
-test: build/$(system)/debug/rules.ninja build/$(system)/release/rules.ninja
-	@cmake --build build/$(system)/debug --target tests
-	@cmake --build build/$(system)/release --target tests
-	@cmake -E chdir build/$(system)/debug ctest --progress --output-on-failure
-	@cmake -E chdir build/$(system)/release ctest --progress --output-on-failure
+configure: build/$(SYSTEM)/build.ninja
 
-benchmark: build/$(system)/release/rules.ninja
-	@cmake --build build/$(system)/release --target benchmarks
-	@cmake -E chdir build/$(system)/release ./benchmarks
+# Run
+run: configure
+	@ninja -C build/$(SYSTEM) -f build-Debug.ninja main
+	@cmake -E chdir build/$(SYSTEM)/Debug ./$(TARGET)
 
-install: build/$(system)/release/rules.ninja
-	@cmake --build build/$(system)/release --target install
+# Test
+test: configure
+	@ninja -C build/$(SYSTEM) -f build-Debug.ninja tests
+	@cmake -E chdir build/$(SYSTEM)/Debug ./tests
+	@ninja -C build/$(SYSTEM) -f build-Release.ninja tests
+	@cmake -E chdir build/$(SYSTEM)/Release ./tests
 
-package: build/$(system)/$(config)/rules.ninja
-	@cmake --build build/$(system)/$(config) --target package
+# Benchmark
+benchmark: configure
+	@ninja -C build/$(SYSTEM) -f build-Release.ninja benchmarks
+	@cmake -E chdir build/$(SYSTEM)/Release ./benchmarks
 
+# Install
+install: configure
+	@ninja -C build/$(SYSTEM) -f build-Release.ninja install
+
+# Package
+package: configure
+	@ninja -C build/$(SYSTEM) -f build-Release.ninja package
+
+# Format
 format:
-	@cmake -P "$(VCPKG_ROOT)/triplets/toolchains/format.cmake"
+	@cmake -P res/format.cmake src
 
+# Clean
 clean:
-	@cmake -E remove_directory build/$(system)
-
-build/$(system)/debug/rules.ninja: CMakeLists.txt
-	@cmake -GNinja -DCMAKE_BUILD_TYPE=Debug \
-	  -DCMAKE_TOOLCHAIN_FILE="$(VCPKG_ROOT)/triplets/toolchains/$(system).cmake" \
-	  -DCMAKE_INSTALL_PREFIX="build/install" \
-	  -DCMAKE_CXX_CLANG_TIDY="clang-tidy" \
-	  -B build/$(system)/debug
-
-build/$(system)/release/rules.ninja: CMakeLists.txt
-	@cmake -GNinja -DCMAKE_BUILD_TYPE=Release \
-	  -DCMAKE_TOOLCHAIN_FILE="$(VCPKG_ROOT)/triplets/toolchains/$(system).cmake" \
-	  -DCMAKE_INSTALL_PREFIX="build/install" \
-	  -DCMAKE_CXX_CLANG_TIDY="clang-tidy" \
-	  -B build/$(system)/release
+	@cmake -E remove_directory build/$(SYSTEM)

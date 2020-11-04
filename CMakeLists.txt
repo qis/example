@@ -1,72 +1,52 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 project(application DESCRIPTION "Application" VERSION 0.1.0 LANGUAGES CXX)
 
 # Version
-set(PROJECT_VENDOR "Company")
+set(PROJECT_VENDOR "Vendor")
 configure_file(res/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/version.h LF)
 
-# Modules
-list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/res/cmake)
-
 # Sources
-file(GLOB_RECURSE sources src/${PROJECT_NAME}/*.[hc]pp)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/${PROJECT_NAME}/*.[hc]pp)
 
 # Objects
-add_library(objects OBJECT ${sources})
-target_precompile_headers(objects PRIVATE <${PROJECT_NAME}/common.hpp>)
-target_compile_definitions(objects PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
-target_compile_features(objects PUBLIC cxx_std_20)
+add_library(${PROJECT_NAME} OBJECT ${sources})
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
-target_include_directories(objects PUBLIC
-  ${CMAKE_CURRENT_BINARY_DIR}/src
-  ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+  $<INSTALL_INTERFACE:include>)
+
+if(WIN32)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
+endif()
 
 # Dependencies
 find_package(fmt CONFIG REQUIRED)
-target_link_libraries(objects PUBLIC fmt::fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
 
 find_package(Threads REQUIRED)
-target_link_libraries(objects PUBLIC Threads::Threads)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
 # Executable
-add_executable(${PROJECT_NAME} src/main.cpp src/main.manifest src/main.rc)
-target_precompile_headers(${PROJECT_NAME} REUSE_FROM objects)
-target_link_libraries(${PROJECT_NAME} PRIVATE objects)
+add_executable(main src/main.cpp src/main.manifest src/main.rc)
+set_target_properties(main PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+target_link_libraries(main PRIVATE ${PROJECT_NAME})
 
 # Tests
-find_package(GTest CONFIG)
-if(GTest_FOUND)
-  enable_testing()
+find_package(doctest CONFIG REQUIRED)
+add_executable(tests EXCLUDE_FROM_ALL src/test.cpp src/main.manifest)
+target_link_libraries(tests PRIVATE ${PROJECT_NAME} doctest::doctest)
 
-  file(GLOB_RECURSE tests_sources src/tests/*.[hc]pp)
-  add_executable(tests EXCLUDE_FROM_ALL ${tests_sources} src/main.manifest)
-  target_link_libraries(tests PRIVATE objects GTest::gtest GTest::gtest_main)
-  target_precompile_headers(tests REUSE_FROM objects)
+# Benchmarks
+find_package(benchmark CONFIG REQUIRED)
+add_executable(benchmarks EXCLUDE_FROM_ALL src/benchmark.cpp src/main.manifest)
+target_link_libraries(benchmarks PRIVATE ${PROJECT_NAME} benchmark::benchmark)
 
-  include(GoogleTest)
-  gtest_discover_tests(tests)
-endif()
-
+# Install
 if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
-  # Benchmarks
-  find_package(benchmark CONFIG)
-  if(benchmark_FOUND)
-    file(GLOB_RECURSE benchmarks_sources src/benchmarks/*.[hc]pp)
-    add_executable(benchmarks EXCLUDE_FROM_ALL ${benchmarks_sources} src/main.manifest)
-    target_link_libraries(benchmarks PRIVATE objects benchmark::benchmark_main)
-    target_precompile_headers(benchmarks REUSE_FROM objects)
-  endif()
+  install(TARGETS main RUNTIME DESTINATION bin)
 
-  # Install
-  install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-
-  if(WIN32 AND VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
-    install(FILES
-      $<TARGET_FILE_DIR:${PROJECT_NAME}>/fmt.dll
-      DESTINATION bin)
-  endif()
-
-  # Package
   string(UUID PROJECT_GUID TYPE SHA1
     NAMESPACE 6BA7B814-9DAD-11D1-80B4-00C04FD430C8
     NAME "CN=${PROJECT_NAME}, O=${PROJECT_VENDOR}")

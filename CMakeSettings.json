@@ -6,7 +6,7 @@
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
-      "buildRoot": "${projectDir}\\build\\windows\\debug",
+      "buildRoot": "${projectDir}\\build\\vs\\debug",
       "installRoot": "${projectDir}\\build\\install"
     },
     {
@@ -15,7 +15,7 @@
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
-      "buildRoot": "${projectDir}\\build\\windows\\release",
+      "buildRoot": "${projectDir}\\build\\vs\\release",
       "installRoot": "${projectDir}\\build\\install"
     }
   ]
