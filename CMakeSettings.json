@@ -17,6 +17,24 @@
       "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
       "buildRoot": "${projectDir}\\build\\vs\\release",
       "installRoot": "${projectDir}\\build\\install"
+    },
+    {
+      "name": "MinSizeRel",
+      "generator": "Ninja",
+      "configurationType": "MinSizeRel",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
+      "buildRoot": "${projectDir}\\build\\vs\\minsizerel",
+      "installRoot": "${projectDir}\\build\\install"
+    },
+    {
+      "name": "RelWithDebInfo",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "cmakeToolchain": "${env.VCPKG_ROOT}\\triplets\\toolchains\\windows.cmake",
+      "buildRoot": "${projectDir}\\build\\vs\\relwithdebinfo",
+      "installRoot": "${projectDir}\\build\\install"
     }
   ]
 }
