@@ -19,7 +19,7 @@ configure: build/$(SYSTEM)/build.ninja
 
 # Run
 run: configure
-	@ninja -C build/$(SYSTEM) -f build-Debug.ninja main
+	@ninja -C build/$(SYSTEM) -f build-Debug.ninja
 	@cmake -E chdir build/$(SYSTEM)/Debug ./$(TARGET)
 
 # Test

@@ -9,44 +9,45 @@ configure_file(res/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/version.h LF)
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/${PROJECT_NAME}/*.[hc]pp)
 
 # Objects
-add_library(${PROJECT_NAME} OBJECT ${sources})
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+add_library(objects OBJECT ${sources})
+target_compile_features(objects PUBLIC cxx_std_20)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(objects PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include>)
 
 if(WIN32)
-  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
+  target_compile_definitions(objects PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
 endif()
 
 # Dependencies
 find_package(fmt CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
+target_link_libraries(objects PUBLIC fmt::fmt)
 
 find_package(Threads REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+target_link_libraries(objects PUBLIC Threads::Threads)
 
 # Main
 add_executable(main src/main.cpp src/main.manifest src/main.rc)
 set_target_properties(main PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
-target_link_libraries(main PRIVATE ${PROJECT_NAME})
+target_link_libraries(main PRIVATE objects)
 
 # Tests
 find_package(doctest CONFIG REQUIRED)
 add_executable(tests EXCLUDE_FROM_ALL src/test.cpp src/main.manifest)
-target_link_libraries(tests PRIVATE ${PROJECT_NAME} doctest::doctest)
+target_link_libraries(tests PRIVATE objects doctest::doctest)
 
 # Benchmarks
 find_package(benchmark CONFIG REQUIRED)
 add_executable(benchmarks EXCLUDE_FROM_ALL src/benchmark.cpp src/main.manifest)
-target_link_libraries(benchmarks PRIVATE ${PROJECT_NAME} benchmark::benchmark)
+target_link_libraries(benchmarks PRIVATE objects benchmark::benchmark)
 
 # Install
 if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
   install(TARGETS main RUNTIME DESTINATION bin)
 
+  # Package
   string(UUID PROJECT_GUID TYPE SHA1
     NAMESPACE 6BA7B814-9DAD-11D1-80B4-00C04FD430C8
     NAME "CN=${PROJECT_NAME}, O=${PROJECT_VENDOR}")
