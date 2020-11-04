@@ -44,7 +44,7 @@ package: configure
 
 # Format
 format:
-	@cmake -P res/format.cmake src
+	@cmake -P $(VCPKG_ROOT)/triplets/toolchains/format.cmake src
 
 # Clean
 clean:

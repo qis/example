@@ -28,7 +28,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
-# Executable
+# Main
 add_executable(main src/main.cpp src/main.manifest src/main.rc)
 set_target_properties(main PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 target_link_libraries(main PRIVATE ${PROJECT_NAME})
